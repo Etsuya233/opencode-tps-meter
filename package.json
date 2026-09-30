@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "opencode-tps-meter",
+  "version": "0.1.0",
+  "description": "Live tokens-per-second meter for the OpenCode V2 TUI, aggregating a session and all of its subagents. The rate sits in the prompt footer; /tps opens a per-agent breakdown in the session sidebar.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Etsuya233/opencode-tps-meter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Etsuya233/opencode-tps-meter/issues"
+  },
+  "homepage": "https://github.com/Etsuya233/opencode-tps-meter#readme",
+  "exports": {
+    ".": "./index.ts",
+    "./tui": "./tui.ts"
+  },
+  "files": [
+    "index.ts",
+    "tui.ts",
+    "src",
+    "!src/*.test.ts",
+    "!src/*.test.tsx",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test src/rate.test.ts src/meter.test.ts src/lines.test.ts",
+    "preview": "node scripts/preview.mjs",
+    "prepublishOnly": "npm run typecheck && npm test"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "tui",
+    "tokens",
+    "tps",
+    "throughput",
+    "sidebar"
+  ],
+  "peerDependencies": {
+    "@opencode/plugin": ">=2.0.18",
+    "@opentui/core": ">=0.5.8",
+    "@opentui/solid": ">=0.5.8",
+    "solid-js": ">=1.9.0"
+  },
+  "peerDependenciesMeta": {
+    "@opentui/core": {
+      "optional": true
+    },
+    "@opentui/solid": {
+      "optional": true
+    },
+    "solid-js": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@opencode/plugin": "^2.0.18",
+    "@opencode/theme": "^2.0.20",
+    "@opentui/core": "^0.5.12",
+    "@opentui/solid": "^0.5.12",
+    "@types/node": "^24.0.0",
+    "solid-js": "^1.9.0",
+    "typescript": "^5.7.0"
+  }
+}
