@@ -108,10 +108,6 @@ export function panelLines(aggregate: Aggregate): string[] {
   return [headerLine(aggregate), ...memberLines(aggregate)]
 }
 
-export type FooterOptions = {
-  expanded: boolean
-}
-
 /**
  * The footer meter.
  *
@@ -119,8 +115,10 @@ export type FooterOptions = {
  * output stops the window empties within a second and this becomes the idle
  * marker, which is also why there is no "avg" suffix to carry: there is no
  * average left to label.
+ *
+ * Nothing here marks whether the panel is open. The panel is its own answer to
+ * that question, so the footer does not repeat it with an arrow.
  */
-export function footerLine(aggregate: Aggregate, options: FooterOptions): string {
-  const body = aggregate.flowing ? `⚡ ${rateText(aggregate.rate)}` : rateText(aggregate.rate)
-  return options.expanded ? `▸ ${body}` : body
+export function footerLine(aggregate: Aggregate): string {
+  return aggregate.flowing ? `⚡ ${rateText(aggregate.rate)}` : rateText(aggregate.rate)
 }

@@ -90,8 +90,7 @@ let overflowing = 0
 for (const scenario of scenarios) {
   // The same functions the plugin renders with, so this cannot drift from it.
   const lines = panelLines(scenario.aggregate)
-  const bar = footerLine(scenario.aggregate, { expanded: false })
-  const barExpanded = footerLine(scenario.aggregate, { expanded: true })
+  const bar = footerLine(scenario.aggregate)
 
   console.log(`\n\x1b[1m${scenario.name}\x1b[0m`)
   for (const line of lines) {
@@ -103,7 +102,6 @@ for (const scenario of scenarios) {
     console.log(`${marker}|${line}${tooWide ? `  (${[...line].length} cols)` : ""}`)
   }
   console.log(`  footer: \x1b[2m${bar}\x1b[0m`)
-  console.log(`  footer: \x1b[2m${barExpanded}\x1b[0m  (expanded)`)
 }
 
 console.log(`\nsidebar budget: ${SIDEBAR_WIDTH} columns`)

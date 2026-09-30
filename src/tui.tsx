@@ -51,6 +51,8 @@ const SWEEP_INTERVAL_MS = 60_000
 type Config = {
   /** Draw the sidebar panel at all. The footer is unaffected. */
   sidebar: boolean
+  /** Open the sidebar panel at startup instead of waiting for `/tps`. */
+  sidebarOpen: boolean
   /** Rate at or above which the reading is drawn as fast. */
   fastRate: number
   /** Rate at or below which the reading is drawn as slow. */
@@ -61,6 +63,7 @@ type Config = {
 
 const DEFAULTS: Config = {
   sidebar: true,
+  sidebarOpen: false,
   fastRate: 45,
   slowRate: 15,
   color: true,
@@ -81,6 +84,7 @@ function readConfig(options: Record<string, any> | undefined): Config {
   const fastRate = readNumber(input.fastRate, DEFAULTS.fastRate, 1, 1000)
   return {
     sidebar: readBoolean(input.sidebar, DEFAULTS.sidebar),
+    sidebarOpen: readBoolean(input.sidebarOpen, DEFAULTS.sidebarOpen),
     // Slow can never reach fast, or a reading could satisfy both branches and
     // the colour would depend on evaluation order.
     slowRate: Math.min(readNumber(input.slowRate, DEFAULTS.slowRate, 0, fastRate), fastRate),
@@ -142,9 +146,10 @@ function MemberRow(props: {
 /**
  * The sidebar panel.
  *
- * Hidden by default: the footer already answers "how fast", and a sidebar that
- * permanently holds a second copy of the same number crowds out the token meter
- * that lives there. `/tps` or a click on the footer opens it.
+ * Hidden unless opened: the footer already answers "how fast", and a sidebar
+ * that permanently holds a second copy of the same number crowds out the token
+ * meter that lives there. `/tps` or a click on the footer opens it, and
+ * `sidebarOpen` can make it start open.
  */
 function Panel(props: {
   context: Plugin.Context
@@ -197,15 +202,16 @@ function Panel(props: {
  * The footer meter.
  *
  * A click target, so it reports hover the way the host's own footer text does:
- * muted at rest, base under the pointer, and a marker while the panel is open.
- * Clicking is a convenience rather than the only route, because a terminal that
- * has not enabled mouse reporting will never deliver the event; `/tps` always
- * works.
+ * muted at rest, base under the pointer. Clicking is a convenience rather than
+ * the only route, because a terminal that has not enabled mouse reporting will
+ * never deliver the event; `/tps` always works.
+ *
+ * The meter carries no marker for whether the panel is open. The panel is
+ * visible on its own when it is, so the footer stays one number.
  */
 function Footer(props: {
   context: Plugin.Context
   aggregate: Accessor<Aggregate | undefined>
-  expanded: Accessor<boolean>
   config: Config
   onToggle: () => void
 }) {
@@ -216,7 +222,7 @@ function Footer(props: {
   const text = createMemo(() => {
     const aggregate = props.aggregate()
     if (!aggregate) return undefined
-    return footerLine(aggregate, { expanded: props.expanded() })
+    return footerLine(aggregate)
   })
 
   return (
@@ -318,7 +324,7 @@ export default Plugin.define({
       })
     }
 
-    const [expanded, setExpanded] = createSignal(false)
+    const [expanded, setExpanded] = createSignal(config.sidebarOpen)
     const toggle = () => setExpanded((value) => !value)
 
     /**
@@ -349,7 +355,6 @@ export default Plugin.define({
           <Footer
             context={context}
             aggregate={() => aggregateFor(input.sessionID ?? "")}
-            expanded={expanded}
             config={config}
             onToggle={toggle}
           />

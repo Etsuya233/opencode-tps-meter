@@ -166,7 +166,7 @@ test("an idle family reads as the idle marker everywhere", () => {
   assert.equal(headerValue(idle), IDLE)
   assert.ok(headerLine(idle).endsWith(IDLE))
   assert.equal(memberLine(idle.members[0]!).value, IDLE)
-  assert.equal(footerLine(idle, { expanded: false }), IDLE)
+  assert.equal(footerLine(idle), IDLE)
 })
 
 test("the idle marker is one column, so an idle row keeps its whole name", () => {
@@ -177,13 +177,15 @@ test("the idle marker is one column, so an idle row keeps its whole name", () =>
 })
 
 test("the footer marks a live rate and drops the mark once output stops", () => {
-  assert.equal(footerLine(aggregate(), { expanded: false }), "⚡ 42.1 t/s")
-  assert.equal(footerLine(aggregate({ rate: 0, flowing: false }), { expanded: false }), IDLE)
+  assert.equal(footerLine(aggregate()), "⚡ 42.1 t/s")
+  assert.equal(footerLine(aggregate({ rate: 0, flowing: false })), IDLE)
 })
 
-test("an expanded panel marks the footer", () => {
-  assert.ok(footerLine(aggregate(), { expanded: true }).startsWith("▸ "))
-  assert.equal(footerLine(aggregate({ rate: 0, flowing: false }), { expanded: true }), `▸ ${IDLE}`)
+test("the footer carries no panel marker", () => {
+  // The open panel is visible on its own, so the footer does not repeat that
+  // state with an arrow beside the number.
+  assert.equal(footerLine(aggregate()).includes("▸"), false)
+  assert.equal(footerLine(aggregate({ rate: 0, flowing: false })).includes("▸"), false)
 })
 
 test("the header is a fixed width whatever the rate", () => {

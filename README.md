@@ -68,7 +68,8 @@ Restart the TUI, or run `opencode service restart` if the meter does not appear.
         "fastRate": 45,
         "slowRate": 15,
         "color": true,
-        "sidebar": true
+        "sidebar": true,
+        "sidebarOpen": false
       }
     }
   ]
@@ -81,10 +82,13 @@ Restart the TUI, or run `opencode service restart` if the meter does not appear.
 | `slowRate` | `number` | `15` | At or below this the reading is drawn as slow. |
 | `color` | `boolean` | `true` | Draw the rate in colour. Off renders it as plain text. |
 | `sidebar` | `boolean` | `true` | Register the sidebar panel. Off leaves only the footer. |
+| `sidebarOpen` | `boolean` | `false` | Start with the panel open. Off waits for `/tps` or a click. |
 
-`slowRate` is clamped to `fastRate`, so a misconfiguration cannot make a reading
-satisfy both branches. Colours come from the active theme rather than literals,
-so the meter follows a light or dark theme.
+`sidebarOpen` only moves the starting state; the panel still toggles with `/tps`
+and with a click on the footer, so the reading can be collapsed again without a
+restart. `slowRate` is clamped to `fastRate`, so a misconfiguration cannot make a
+reading satisfy both branches. Colours come from the active theme rather than
+literals, so the meter follows a light or dark theme.
 
 ## Commands
 
@@ -176,9 +180,9 @@ meter reports what it can measure.
 - **The sidebar needs width.** The panel is hidden below 120 columns and in
   subagent sessions, which the host decides. The footer is unaffected, and
   **Throughput detail** answers in a toast when the sidebar is not rendered.
-- **Discoverability is on the user.** The panel starts hidden, and terminals
-  without mouse reporting get no hover cue. The slash command is the reliable
-  route.
+- **Discoverability is on the user.** The panel starts hidden unless
+  `sidebarOpen` turns it on, and terminals without mouse reporting get no hover
+  cue. The slash command is the reliable route.
 - **The reading is an estimate, and the panel does not say so.** Live tokens
   cannot be anything else: the provider's count only exists once a step has
   finished. It converges on that count as a model is used, and the number stops
@@ -209,6 +213,11 @@ sends, copied from the event manifest rather than from what the plugin expects.
 An earlier revision read the provider's token count from a field that does not
 exist, and a fixture that agreed with it kept the suite green while the number
 was never once used — which is why the shapes are mirrored deliberately here.
+
+## Acknowledgements
+
+Thanks to [ChiR24/opencode-tps-meter](https://github.com/ChiR24/opencode-tps-meter),
+which this plugin is based on.
 
 ## License
 
