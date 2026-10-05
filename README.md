@@ -1,4 +1,4 @@
-# opencode-tps-meter
+# @etsuya/opencode-tps-meter
 
 Live tokens-per-second for OpenCode V2, counting a session **and every subagent
 working under it**.
@@ -28,7 +28,7 @@ the one thing nothing else has: the rate per agent.
 ## Install
 
 ```sh
-npm install opencode-tps-meter
+npm install @etsuya/opencode-tps-meter
 ```
 
 Add it to `cli.json` — a terminal-only plugin belongs there, so it stays active
@@ -36,7 +36,7 @@ against remote servers:
 
 ```json
 {
-  "plugins": ["opencode-tps-meter"]
+  "plugins": ["@etsuya/opencode-tps-meter"]
 }
 ```
 
@@ -63,7 +63,7 @@ Restart the TUI, or run `opencode service restart` if the meter does not appear.
 {
   "plugins": [
     {
-      "package": "opencode-tps-meter",
+      "package": "@etsuya/opencode-tps-meter",
       "options": {
         "fastRate": 45,
         "slowRate": 15,

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "opencode-tps-meter",
+  "name": "@etsuya/opencode-tps-meter",
   "version": "0.1.0",
   "description": "Live tokens-per-second meter for the OpenCode V2 TUI, aggregating a session and all of its subagents. The rate sits in the prompt footer; /tps opens a per-agent breakdown in the session sidebar.",
   "license": "MIT",
@@ -44,22 +44,13 @@
     "throughput",
     "sidebar"
   ],
+  "dependencies": {
+    "@opencode/plugin": ">=2.0.18"
+  },
   "peerDependencies": {
-    "@opencode/plugin": ">=2.0.18",
     "@opentui/core": ">=0.5.8",
     "@opentui/solid": ">=0.5.8",
     "solid-js": ">=1.9.0"
-  },
-  "peerDependenciesMeta": {
-    "@opentui/core": {
-      "optional": true
-    },
-    "@opentui/solid": {
-      "optional": true
-    },
-    "solid-js": {
-      "optional": true
-    }
   },
   "devDependencies": {
     "@opencode/plugin": "^2.0.18",
